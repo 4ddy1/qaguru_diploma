@@ -117,8 +117,8 @@ jobs:
             --endpoint https://allure.autotests.cloud \
             --project-id 4717 \
             --token ${{ secrets.ALLURE_TOKEN }} \
-            --launch-name "GitHub Run #${{ github.run_number }}" \
-            --launch-type automated
+            --launch-name "GitHub Run #${{ github.run_number }}"
+      
       
       
 
