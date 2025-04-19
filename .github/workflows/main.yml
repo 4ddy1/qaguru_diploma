@@ -104,3 +104,20 @@ jobs:
             -d parse_mode=Markdown \
             -d text="$MESSAGE"
 
+      - name: Upload Allure Results to TestOps
+        if: always()
+        run: |
+          curl -L https://dl.qameta.io/allurectl/install | sh
+          allurectl upload allure-results \
+            --endpoint ${{ secrets.ALLURE_ENDPOINT }} \
+            --token ${{ secrets.ALLURE_TOKEN }} \
+            --project-id ${{ secrets.ALLURE_PROJECT_ID }} \
+            --launch-name "GitHub Actions Run #${{ github.run_number }}" \
+            --job-name "Playwright Tests" \
+            --job-run-id "${{ github.run_id }}" \
+            --job-run-url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --ci-type github
+        env:
+          ALLURE_ENDPOINT: ${{ secrets.ALLURE_ENDPOINT }}
+          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+          ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
