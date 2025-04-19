@@ -111,14 +111,15 @@ jobs:
           sudo mv allurectl /usr/local/bin/
 
       - name: Upload results to Allure TestOps
+        if: always()
         run: |
-          allurectl upload \
+          allurectl upload allure-results \
             --endpoint https://allure.autotests.cloud \
             --project-id 4717 \
-            --results allure-results \
             --token ${{ secrets.ALLURE_TOKEN }} \
             --launch-name "GitHub Run #${{ github.run_number }}" \
             --launch-type automated
-        if: always()
+      
+      
 
 
