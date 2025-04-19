@@ -104,20 +104,21 @@ jobs:
             -d parse_mode=Markdown \
             -d text="$MESSAGE"
 
-      - name: Upload Allure Results to TestOps
-        if: always()
+      - name: Install allurectl
         run: |
-          curl -L https://dl.qameta.io/allurectl/install | sh
-          allurectl upload allure-results \
-            --endpoint ${{ secrets.ALLURE_ENDPOINT }} \
+          curl -o allurectl -L "https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64"
+          chmod +x allurectl
+          sudo mv allurectl /usr/local/bin/
+
+      - name: Upload results to Allure TestOps
+        run: |
+          allurectl upload \
+            --endpoint https://allure.autotests.cloud \
+            --project-id 4717 \
+            --results allure-results \
             --token ${{ secrets.ALLURE_TOKEN }} \
-            --project-id ${{ secrets.ALLURE_PROJECT_ID }} \
-            --launch-name "GitHub Actions Run #${{ github.run_number }}" \
-            --job-name "Playwright Tests" \
-            --job-run-id "${{ github.run_id }}" \
-            --job-run-url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-            --ci-type github
-        env:
-          ALLURE_ENDPOINT: ${{ secrets.ALLURE_ENDPOINT }}
-          ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
-          ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
+            --launch-name "GitHub Run #${{ github.run_number }}" \
+            --launch-type automated
+        if: always()
+
+
