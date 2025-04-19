@@ -71,3 +71,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-history
           publish_branch: gh-pages
+
+      - name: Notify Telegram
+        if: always()
+        run: |
+          STATUS=${{ job.status }}
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="✅ Тесты завершены. Статус: *$STATUS*%0A\
+          Allure Report будет доступен в артефактах GitHub Actions."
