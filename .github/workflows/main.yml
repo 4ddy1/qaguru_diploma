@@ -72,6 +72,23 @@ jobs:
           publish_dir: allure-history
           publish_branch: gh-pages
 
+      - name: Install allurectl
+        run: |
+          curl -L -o allurectl https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64
+          chmod +x allurectl
+          sudo mv allurectl /usr/local/bin/
+
+      - name: Upload results to Allure TestOps
+        if: always()
+        run: |
+          allurectl upload \
+            --endpoint ${{ secrets.ALLURE_ENDPOINT }} \
+            --token ${{ secrets.ALLURE_TOKEN }} \
+            --project-id ${{ secrets.ALLURE_PROJECT_ID }} \
+            --launch-name "GitHub Run #${{ github.run_number }}" \
+            --results "allure-results"
+
+
       - name: Parse Allure summary
         id: parse_summary
         if: always()
