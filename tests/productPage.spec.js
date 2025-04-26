@@ -3,28 +3,24 @@ import { test, expect } from '@playwright/test';
 import * as pages from '../src/pages/index';
 import 'dotenv/config';
 
-test.describe.serial('Product page', () => {
-  test('twitter click', async ({ page }) => {
-    const mainPage = new pages.Crash(page);
-    const visual = new pages.Visual(page);
-    const product = new pages.Product(page);
+test.describe('Product page', () => {
+    test.beforeEach(async ({page}) => {
+      const app = new pages.App(page);
+      await app.mainPage.open(process.env.MAIN_URL);
+    })
+    test('twitter click', async ({ page }) => {
+      const app = new pages.App(page);
+      await app.visual.cardLinkCheck();
+      await app.product.twitterLinkClick();
 
-    await mainPage.open(process.env.MAIN_URL);
-    await visual.cardLinkCheck();
-    await product.twitterLinkClick();
-
-    await expect(product.mistakeMessage).toBeVisible();
+      await expect(app.product.mistakeMessage).toBeVisible();
   });
 
   test('Product comment', async ({ page }) => {
-    const mainPage = new pages.Crash(page);
-    const visual = new pages.Visual(page);
-    const product = new pages.Product(page);
+    const app = new pages.App(page);
+    await app.visual.cardLinkCheck();
+    await app.product.addComment("adilTest");
 
-    await mainPage.open(process.env.MAIN_URL);
-    await visual.cardLinkCheck();
-    await product.addComment("adilTest");
-
-    await expect(product.mistakeMessage).toBeVisible({timeout:25000});
+    await expect(app.product.mistakeMessage).toBeVisible();
   });
 });

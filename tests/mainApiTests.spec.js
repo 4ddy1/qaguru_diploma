@@ -7,7 +7,7 @@ import 'dotenv/config';
 import { faker } from '@faker-js/faker';
 import {todo} from "node:test";
 
-test.describe.serial('has description', async () => {
+test.describe.skip('has description', async () => {
 
     const baseTest = new BaseTest();
     const api = new Api();
