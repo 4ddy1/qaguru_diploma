@@ -1,13 +1,12 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
-import { BaseTest, Api } from "../src/api/service/index";
-import { Builder } from "../src/api/helpers/index";
-import { Challenges, Todos, Heartbeats } from "../src/api/controllers/index";
+import {Challenges, Todos, Heartbeats, Builder, BaseTest, Api} from "../src/api/index"
+
 import 'dotenv/config';
 import { faker } from '@faker-js/faker';
-import {todo} from "node:test";
 
-test.describe.skip('has description', async () => {
+
+test.describe('has description', async () => {
 
     const baseTest = new BaseTest();
     const api = new Api();

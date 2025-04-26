@@ -1,14 +1,12 @@
 import {Api} from "../service";
 import {faker} from "@faker-js/faker";
+import {Builder} from "../helpers/index";
 
 export class Todos {
     constructor(){
         this.api = new Api();
-        this.todo = {
-            "title": `adil test${faker.number.int({max:9999999999999999})}`,
-            "doneStatus": true,
-            "description": ""
-        }
+        this.builder = new Builder();
+
     }
 
     async getTodos(guid){
@@ -56,7 +54,7 @@ export class Todos {
     }
 
     async postTodos(guid, payload){
-        return await this.api.post(guid, `${process.env.BASEURL}todos`, payload || this.todo);
+        return await this.api.post(guid, `${process.env.BASEURL}todos`, payload || await this.builder.todoBuid());
     }
 
     async postTodosXml(guid, payload){
@@ -80,11 +78,11 @@ export class Todos {
     }
 
     async postTodosId(guid, id, payload){
-        return await this.api.post(guid, `${process.env.BASEURL}todos/${id.todos[0].id}`, payload || this.todo);
+        return await this.api.post(guid, `${process.env.BASEURL}todos/${id.todos[0].id}`, payload || await this.builder.todoBuid());
     }
 
     async putTodosId(guid, id, payload){
-        return await this.api.put(guid, `${process.env.BASEURL}todos/${id.todos[0].id}`, payload || this.todo);
+        return await this.api.put(guid, `${process.env.BASEURL}todos/${id.todos[0].id}`, payload || await this.builder.todoBuid());
     }
 
     async deleteTodosId(guid, id){
