@@ -83,14 +83,6 @@ export class Todos {
         return await this.api.post(guid, `${process.env.BASEURL}todos/${id.todos[0].id}`, payload || this.todo);
     }
 
-    async postTodosInvalidId(guid, id, payload){
-        return await this.api.post(guid, `${process.env.BASEURL}todos/00`, payload || this.todo);
-    }
-
-    async putTodos(guid, payload){
-        return await this.api.put(guid, `${process.env.BASEURL}todos/00`, payload || this.todo);
-    }
-
     async putTodosId(guid, id, payload){
         return await this.api.put(guid, `${process.env.BASEURL}todos/${id.todos[0].id}`, payload || this.todo);
     }

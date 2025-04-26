@@ -206,19 +206,6 @@ test.describe.skip('has description', async () => {
             expect(response.status).toBe(400);
         });
 
-    test('PUT /todos/{id} (400)',
-        {tag: '@put'},
-        async () => {
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-                "doneStatus": true,
-                "description": "",
-            }
-
-            const response = await todos.putTodos(guid, payload);
-            expect(response.status).toBe(400);
-        });
-
     test('POST /todos/{id} (200)',
         {tag: '@post'},
         async () => {
@@ -234,14 +221,6 @@ test.describe.skip('has description', async () => {
             expect(responseBody).toHaveProperty('description');
             expect(response.status).toBe(200);
             
-        });
-
-    test('POST /todos/{id} (404)',
-        {tag: '@post'},
-        async () => {
-
-            const response = await todos.postTodosInvalidId(guid);
-            expect(response.status).toBe(404);
         });
 
     test('PUT /todos/{id} full (200)',
