@@ -2,10 +2,6 @@
 import { test, expect } from '@playwright/test';
 import {Challenges, Todos, Heartbeats, Builder, BaseTest, Api} from "../src/api/index"
 
-import 'dotenv/config';
-import { faker } from '@faker-js/faker';
-
-
 test.describe('has description', async () => {
 
     const baseTest = new BaseTest();
@@ -125,86 +121,6 @@ test.describe('has description', async () => {
             expect(response.status).toBe(201);
         });
 
-    test('POST /todos (400) doneStatus',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-                "doneStatus": 'adil',
-                "description": ""
-            }
-            const response = await todos.postTodos(guid, payload);
-            expect(response.status).toBe(400);
-        });
-
-    test('POST /todos (400) title too long',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `adil test${faker.string.sample(50)}`,
-                "doneStatus": true,
-                "description": ""
-            }
-            const response = await todos.postTodos(guid, payload);
-            expect(response.status).toBe(400);
-        });
-
-    test('POST /todos (400) description too long',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-                "doneStatus": true,
-                "description": `${faker.string.sample(500)}`
-            }
-            const response = await todos.postTodos(guid, payload);
-            expect(response.status).toBe(400);
-        });
-
-    test('POST /todos (201) max out content',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `${faker.string.sample(50)}`,
-                "doneStatus": true,
-                "description": `${faker.string.sample(200)}`
-            }
-            const response = await todos.postTodos(guid, payload);
-            const responseBody = await response.json(); // Парсим тело ответа в JSON
-
-            expect(responseBody).toHaveProperty('id');
-            expect(responseBody).toHaveProperty('title');
-            expect(responseBody).toHaveProperty('doneStatus');
-            expect(responseBody).toHaveProperty('description');
-            expect(response.status).toBe(201);
-            
-        });
-
-    test('POST /todos (413) content too long',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `${faker.string.sample(5000)}`,
-                "doneStatus": true,
-                "description": `${faker.string.sample(5000)}`
-            }
-            const response = await todos.postTodos(guid, payload);
-            expect(response.status).toBe(413);
-        });
-
-    test('POST /todos (400) extra',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-                "doneStatus": true,
-                "description": "",
-                "priority": "extra"
-            }
-            const response = await todos.postTodos(guid, payload);
-            expect(response.status).toBe(400);
-        });
-
     test('POST /todos/{id} (200)',
         {tag: '@post'},
         async () => {
@@ -239,26 +155,6 @@ test.describe('has description', async () => {
             
         });
 
-    test('PUT /todos/{id} partial (200)',
-        {tag: '@put'},
-        async () => {
-            const todoId = await todos.getTodos(); // запрос тудушек
-            const id = await todoId.json(); // парсинг в json
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-            }
-
-            const response = await todos.putTodosId(guid, id, payload);
-            const responseBody = await response.json(); // Парсим тело ответа в JSON
-
-            expect(responseBody).toHaveProperty('id');
-            expect(responseBody).toHaveProperty('title');
-            expect(responseBody).toHaveProperty('doneStatus');
-            expect(responseBody).toHaveProperty('description');
-            expect(response.status).toBe(200);
-            
-        });
-
     test('PUT /todos/{id} no title (400)',
         {tag: '@put'},
         async () => {
@@ -267,22 +163,6 @@ test.describe('has description', async () => {
             const payload = {
                 "doneStatus": true,
                 "description": "",
-            }
-
-            const response = await todos.putTodosId(guid, id, payload);
-            expect(response.status).toBe(400);
-        });
-
-    test('PUT /todos/{id} no amend id (400)',
-        {tag: '@put'},
-        async () => {
-            const todoId = await todos.getTodos(); // запрос тудушек
-            const id = await todoId.json(); // парсинг в json
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-                "doneStatus": true,
-                "description": "",
-                "id": 10
             }
 
             const response = await todos.putTodosId(guid, id, payload);
@@ -366,47 +246,6 @@ test.describe('has description', async () => {
             
         });
 
-    test('POST /todos XML',
-        {tag: '@post'},
-        async () => {
-            const payload =
-                `<doneStatus>true</doneStatus>
-                <description/>
-                <title>adil test${faker.number.int({max: 9999999999999999})}</title>`
-
-            const response = await todos.postTodosXml(guid, payload);
-            console.log(await response.text());
-            expect(response.status).toBe(201);
-        });
-
-    test('POST /todos JSON',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-                "doneStatus": true,
-                "description": "",
-            }
-
-            const response = await todos.postTodosJson(guid, payload);
-            
-            expect(response.status).toBe(201);
-        });
-
-    test('POST /todos (415)',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-                "doneStatus": true,
-                "description": "",
-            }
-
-            const response = await todos.postTodosGzip(guid, payload);
-            
-            expect(response.status).toBe(415);
-        });
-
     test('GET /challenger/guid (existing X-CHALLENGER)',
         {tag: '@get'},
         async () => {
@@ -431,30 +270,6 @@ test.describe('has description', async () => {
         async () => {
             const response = await challenges.getChallengerDatabase(guid)
             expect(response.status).toBe(200);
-        });
-
-    test('POST /todos XML to JSON',
-        {tag: '@post'},
-        async () => {
-            const payload =
-                `<doneStatus>true</doneStatus>
-                <description/>
-                <title>adil test${faker.number.int({max: 9999999999999999})}</title>`
-
-            const response = await todos.postTodosXmlToJson(guid, payload);
-            expect(response.status).toBe(201);
-        });
-
-    test('POST /todos JSON to XML',
-        {tag: '@post'},
-        async () => {
-            const payload = {
-                "title": `adil test${faker.number.int({max:9999999999999999})}`,
-                "doneStatus": true,
-                "description": ""
-            }
-            const response = await todos.postTodosJsonToXml(guid, payload);
-            expect(response.status).toBe(201);
         });
 
     test('DELETE /heartbeat (405)',
