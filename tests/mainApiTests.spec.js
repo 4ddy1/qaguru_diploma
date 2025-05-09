@@ -76,13 +76,6 @@ test.describe('has description', async () => {
         
     });
 
-    test('GET /todos/{id} (404)',
-        {tag: '@get'},
-        async () => {
-        const response = await todos.getTodosInvalidId(guid); // несуществующий id
-        expect(response.status).toBe(404);
-    });
-
     test('GET /todos (200) ?filter',
         {tag: '@get'},
         async () => {

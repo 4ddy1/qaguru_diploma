@@ -1,5 +1,4 @@
 import {Api} from "../service";
-import {faker} from "@faker-js/faker";
 import {Builder} from "../helpers/index";
 
 export class Todos {
@@ -45,36 +44,12 @@ export class Todos {
         return await this.api.get(guid, `${process.env.BASEURL}todos/${id.todos[0].id}`);
     }
 
-    async getTodosInvalidId(guid){
-        return await this.api.get(guid, `${process.env.BASEURL}todos/4dasd5`);
-    }
-
     async headTodos(guid){
         return await this.api.head(guid, `${process.env.BASEURL}todos`);
     }
 
     async postTodos(guid, payload){
         return await this.api.post(guid, `${process.env.BASEURL}todos`, payload || await this.builder.todoBuid());
-    }
-
-    async postTodosXml(guid, payload){
-        return await this.api.postXml(guid, `${process.env.BASEURL}todos`, payload);
-    }
-
-    async postTodosJson(guid, payload){
-        return await this.api.postJson(guid, `${process.env.BASEURL}todos`, payload);
-    }
-
-    async postTodosGzip(guid, payload){
-        return await this.api.postGzip(guid, `${process.env.BASEURL}todos`, payload);
-    }
-
-    async postTodosXmlToJson(guid, payload){
-        return await this.api.postXmlToJson(guid, `${process.env.BASEURL}todos`, payload);
-    }
-
-    async postTodosJsonToXml(guid, payload){
-        return await this.api.postJsonToXml(guid, `${process.env.BASEURL}todos`, payload);
     }
 
     async postTodosId(guid, id, payload){
