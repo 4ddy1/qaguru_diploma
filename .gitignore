@@ -9,3 +9,4 @@ node_modules/
 /allure-results
 /.idea/
 .env
+history.jsonl
